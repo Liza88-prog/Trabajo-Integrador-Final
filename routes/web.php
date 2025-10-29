@@ -7,6 +7,7 @@ use App\Http\Controllers\NovedadController;
 use App\Http\Controllers\PersonalControlController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
+use App\Http\Controllers\ProductividadController;
 use Illuminate\Support\Facades\Route;
 
 // ---------------------------------------
@@ -65,3 +66,16 @@ Route::post('novedades', [NovedadController::class, 'store']);
 Route::get('novedades/{novedad}', [NovedadController::class, 'show']);
 Route::put('novedades/{novedad}', [NovedadController::class, 'update']);
 Route::delete('novedades/{novedad}', [NovedadController::class, 'destroy']);
+
+
+// ---------------------------------------
+// RUTAS DE PRODUCTIVIDAD// intente hacer un post para registrar productividad y hacer la prueba en postman
+//pero me pide autenticacion, pero no pude logearme
+// ---------------------------------------
+Route::middleware(['auth'])->group(function () {
+Route::get('/productividades', [ProductividadController::class, 'index'])->name('productividades.index');
+Route::get('/productividades/create', function () {
+        return view('productividades.create');
+    })->name('productividades.create'); // 👈 esta muestra el formulario
+Route::post('/productividades', [ProductividadController::class, 'store'])->name('productividades.store');
+});
