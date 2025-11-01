@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\Route;
 // ---------------------------------------
 // RUTAS DE AUTENTICACIÓN
 // ---------------------------------------
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard'); 
+})->name('dashboard');
+
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
@@ -21,33 +30,36 @@ Route::prefix('auth')->group(function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
+Route::prefix('personalcontrol')->name('personalcontrol.')->group(function () { 
+    Route::get('/', [PersonalControlController::class, 'index'])->name('index');
+    Route::get('/create', [PersonalControlController::class, 'create'])->name('create');
+    Route::post('/', [PersonalControlController::class, 'store'])->name('store');
+    Route::get('/{personal_control}/edit', [PersonalControlController::class, 'edit'])->name('edit');
+    Route::put('/{personal_control}', [PersonalControlController::class, 'update'])->name('update');
+    Route::delete('/{personal_control}', [PersonalControlController::class, 'destroy'])->name('destroy');
 
+
+});
 // ---------------------------------------
 // RUTAS DE PERSONAL CONTROL
 // ---------------------------------------
-Route::get('personal-control', [PersonalControlController::class, 'index']);
-Route::post('personal-control', [PersonalControlController::class, 'store']);
-Route::get('personal-control/{personal_control}', [PersonalControlController::class, 'show']);
-Route::put('personal-control/{personal_control}', [PersonalControlController::class, 'update']);
-Route::delete('personal-control/{personal_control}', [PersonalControlController::class, 'destroy']);
-
+Route::resource('PersonalControl', PersonalControlController::class)->names('   PersonalControl');
 // ---------------------------------------
 // RUTAS DE VEHÍCULOS
 // ---------------------------------------
-Route::get('vehiculo', [VehiculoController::class, 'index']);
-Route::post('vehiculo', [VehiculoController::class, 'store']);
-Route::get('vehiculo/{vehiculo}', [VehiculoController::class, 'show']);
-Route::put('vehiculo/{vehiculo}', [VehiculoController::class, 'update']);
-Route::delete('vehiculo/{vehiculo}', [VehiculoController::class, 'destroy']);
+Route::resource('vehiculo', VehiculoController::class);
 
 // ---------------------------------------
 // RUTAS DE CONDUCTORES
 // ---------------------------------------
-Route::get('conductores', [ConductorController::class, 'index']);
-Route::post('crear-conductores', [ConductorController::class, 'store']);
-Route::get('conductores/{conductor}', [ConductorController::class, 'show']);
-Route::put('conductores/{conductor}', [ConductorController::class, 'update']);
-Route::delete('conductores/{conductor}', [ConductorController::class, 'destroy']);
+//Route::resource('conductores', ConductorController::class)->names('conductores'); 
+Route::get('conductores', [ConductorController::class, 'index'])->name('conductores.index');
+Route::get('conductores/create', [ConductorController::class, 'create'])->name('conductores.create');
+Route::post('conductores', [ConductorController::class, 'store'])->name('conductores.store');
+Route::get('conductores/{conductor}/edit', [ConductorController::class, 'edit'])->name('conductores.edit');
+Route::put('conductores/{conductor}', [ConductorController::class, 'update'])->name('conductores.update');
+Route::delete('conductores/{conductor}', [ConductorController::class, 'destroy'])->name('conductores.destroy');
+Route::get('conductores/{conductor}', [ConductorController::class, 'show'])->name('conductores.show');
 
 // ---------------------------------------
 // RUTAS DE ACOMPAÑANTES
