@@ -88,13 +88,7 @@ Route::prefix('novedades')->name('novedades.')->group(function () {
 
 
 // ---------------------------------------
-// RUTAS DE PRODUCTIVIDAD// intente hacer un post para registrar productividad y hacer la prueba en postman
-//pero me pide autenticacion, pero no pude logearme
+// RUTAS DE PRODUCTIVIDAD//
 // ---------------------------------------
-Route::middleware(['auth'])->group(function () {
-Route::get('/productividades', [ProductividadController::class, 'index'])->name('productividades.index');
-Route::get('/productividades/create', function () {
-        return view('productividades.create');
-    })->name('productividades.create'); // 👈 esta muestra el formulario
-Route::post('/productividades', [ProductividadController::class, 'store'])->name('productividades.store');
-});
+Route::resource('productividades', ProductividadController::class)->parameters(['productividades' => 'productividad']);
+;

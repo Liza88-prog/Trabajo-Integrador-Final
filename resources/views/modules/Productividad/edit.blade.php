@@ -3,22 +3,18 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">
-                Registrar Productividad
+                Editar Productividad
             </h2>
 
             {{-- 🔹 Navegadores --}}
             <nav class="flex space-x-2">
-                <a href="{{ route('conductores.index') }}"
+                <a href="{{ route('productividades.index') }}"
                    class="text-white bg-black px-3 py-1 rounded font-medium text-sm hover:bg-gray-800">
-                    Ir a Conductores
+                    Volver al Listado
                 </a>
-                <a href="{{ route('vehiculo.index') }}"
+                <a href="{{ route('productividades.create') }}"
                    class="text-white bg-black px-3 py-1 rounded font-medium text-sm hover:bg-gray-800">
-                    Ir a Vehículos
-                </a>
-                <a href="{{ route('novedades.index') }}"
-                   class="text-white bg-black px-3 py-1 rounded font-medium text-sm hover:bg-gray-800">
-                    Ir a Novedades
+                    Nueva Productividad
                 </a>
             </nav>
         </div>
@@ -26,8 +22,15 @@
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+            
+            {{-- ✅ Mensaje de éxito --}}
+            @if (session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-            {{-- 🔹 Mensaje de error --}}
+            {{-- ⚠️ Errores de validación --}}
             @if ($errors->any())
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
                     <strong class="font-bold">¡Ups!</strong>
@@ -36,10 +39,10 @@
             @endif
 
             {{-- 🔹 Tarjeta del formulario --}}
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-
-                <form action="{{ route('productividades.store') }}" method="POST">
+            <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
+                <form action="{{ route('productividades.update', $productividad->id) }}" method="POST">
                     @csrf
+                    @method('PUT')
 
                     {{-- Personal Control --}}
                     <div class="mb-4">
@@ -48,9 +51,9 @@
                         </label>
                         <select name="personal_control_id" id="personal_control_id"
                                 class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="">Seleccione un personal...</option>
                             @foreach($personalcontrols as $personal)
-                                <option value="{{ $personal->id }}" {{ old('personal_control_id') == $personal->id ? 'selected' : '' }}>
+                                <option value="{{ $personal->id }}"
+                                    {{ old('personal_control_id', $productividad->personal_control_id) == $personal->id ? 'selected' : '' }}>
                                     {{ $personal->nombre_apellido }}
                                 </option>
                             @endforeach
@@ -65,7 +68,8 @@
                         <label for="fecha" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
                             Fecha
                         </label>
-                        <input type="date" name="fecha" id="fecha" value="{{ old('fecha') }}"
+                        <input type="date" name="fecha" id="fecha"
+                               value="{{ old('fecha', $productividad->fecha) }}"
                                class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                         @error('fecha')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
@@ -79,11 +83,8 @@
                                 Total Conductores
                             </label>
                             <input type="number" name="total_conductor" id="total_conductor"
-                                   value="{{ old('total_conductor') }}" min="0"
+                                   value="{{ old('total_conductor', $productividad->total_conductor) }}" min="0"
                                    class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                            @error('total_conductor')
-                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                            @enderror
                         </div>
 
                         <div>
@@ -91,11 +92,8 @@
                                 Total Vehículos
                             </label>
                             <input type="number" name="total_vehiculos" id="total_vehiculos"
-                                   value="{{ old('total_vehiculos') }}" min="0"
+                                   value="{{ old('total_vehiculos', $productividad->total_vehiculos) }}" min="0"
                                    class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                            @error('total_vehiculos')
-                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                            @enderror
                         </div>
 
                         <div>
@@ -103,29 +101,26 @@
                                 Total Acompañantes
                             </label>
                             <input type="number" name="total_acompanante" id="total_acompanante"
-                                   value="{{ old('total_acompanante') }}" min="0"
+                                   value="{{ old('total_acompanante', $productividad->total_acompanante) }}" min="0"
                                    class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                            @error('total_acompanante')
-                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                            @enderror
                         </div>
                     </div>
 
                     {{-- Botones --}}
                     <div class="mt-6 flex justify-between">
-                        <a href="{{ route('productividades.index') }}"
-                           class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600">
+                        <a href="{{ route('productividades.show', $productividad->id) }}"
+                           class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md 
+                                  font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-600">
                             Cancelar
                         </a>
 
                         <button type="submit"
                                 class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md 
                                        font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
-                            Guardar Productividad
+                            Actualizar Productividad
                         </button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

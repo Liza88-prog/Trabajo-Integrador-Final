@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Productividad;
+use App\Models\PersonalControl;
 use Illuminate\Http\Request;
 
 class ProductividadController extends Controller
@@ -12,9 +13,17 @@ class ProductividadController extends Controller
      */
     public function index()
     {
-        $productividades = Productividad::with('personalControl')->get();
+        $productividades = Productividad::with('personalcontrol')->get();
+        return view('modules.Productividad.index', compact('productividades'));
+    }
 
-        return response()->json($productividades, 200);
+    /**
+     * Muestra el formulario para crear una nueva productividad
+     */
+    public function create()
+    {
+        $personalcontrols = PersonalControl::all();
+        return view('modules.Productividad.create', compact('personalcontrols'));
     }
 
     /**
@@ -30,43 +39,44 @@ class ProductividadController extends Controller
             'total_acompanante' => 'nullable|integer|min:0',
         ]);
 
-        $productividad = Productividad::create($data);
+        Productividad::create($data);
 
-        return response()->json([
-            'message' => 'Productividad registrada correctamente',
-            'productividad' => $productividad
-        ], 201);
+        return redirect()->route('productividades.index')
+                        ->with('success', 'Productividad registrada correctamente.');
     }
 
     /**
-     * Muestra una productividad específica
+     * Muestra el detalle de una productividad
      */
     public function show(Productividad $productividad)
     {
-        $productividad->load('personalControl');
-
-        return response()->json($productividad, 200);
+        $productividad->load('personalcontrol');
+        return view('modules.Productividad.show', compact('productividad'));
     }
 
     /**
-     * Actualiza los datos de una productividad
+     * Muestra el formulario para editar una productividad
      */
+    public function edit(Productividad $productividad)
+    {
+        $personalcontrols = PersonalControl::all();
+        return view('modules.Productividad.edit', compact('productividad', 'personalcontrols'));
+    }
+
     public function update(Request $request, Productividad $productividad)
     {
         $data = $request->validate([
-            'personal_control_id' => 'sometimes|required|integer|exists:personal_control,id',
-            'fecha' => 'sometimes|required|date',
-            'total_conductor' => 'sometimes|nullable|integer|min:0',
-            'total_vehiculos' => 'sometimes|nullable|integer|min:0',
-            'total_acompanante' => 'sometimes|nullable|integer|min:0',
+            'personal_control_id' => 'required|integer|exists:personal_control,id',
+            'fecha' => 'required|date',
+            'total_conductor' => 'nullable|integer|min:0',
+            'total_vehiculos' => 'nullable|integer|min:0',
+            'total_acompanante' => 'nullable|integer|min:0',
         ]);
 
         $productividad->update($data);
 
-        return response()->json([
-            'message' => 'Productividad actualizada correctamente',
-            'productividad' => $productividad
-        ], 200);
+        return redirect()->route('productividades.show', $productividad->id)
+                        ->with('success', 'Productividad actualizada correctamente.');
     }
 
     /**
@@ -76,8 +86,7 @@ class ProductividadController extends Controller
     {
         $productividad->delete();
 
-        return response()->json([
-            'message' => 'Productividad eliminada correctamente'
-        ], 204);
+        return redirect()->route('productividades.index')
+                        ->with('success', 'Productividad eliminada correctamente.');
     }
 }
