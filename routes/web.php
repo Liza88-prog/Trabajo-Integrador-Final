@@ -64,11 +64,12 @@ Route::get('conductores/{conductor}', [ConductorController::class, 'show'])->nam
 // ---------------------------------------
 // RUTAS DE ACOMPAÑANTES
 // ---------------------------------------
-Route::get('acompañante', [AcompanianteController::class, 'index']);
+Route::resource('acompaniante', AcompanianteController::class);
+/*Route::get('acompaniante', [AcompanianteController::class, 'index'])->name('acompaniante.index');
 Route::post('acompañante', [AcompanianteController::class, 'store']);
 Route::get('acompañante/{acompañante}', [AcompanianteController::class, 'show']);
 Route::put('acompañante/{acompañante}', [AcompanianteController::class, 'update']);
-Route::delete('acompañante/{acompañante}', [AcompanianteController::class, 'destroy']);
+Route::delete('acompañante/{acompañante}', [AcompanianteController::class, 'destroy']);*/
 
 // ---------------------------------------
 // RUTAS DE NOVEDADES

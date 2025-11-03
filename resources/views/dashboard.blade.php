@@ -12,7 +12,7 @@
                     Bienvenido al Panel de Control
                 </h3>
 
-                <a href="{{ route('PersonalControl.index') }}"
+                <a href="{{ route('personalcontrol.index') }}"
                    class="inline-block px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
                    Ir al Panel de Personal
                 </a>

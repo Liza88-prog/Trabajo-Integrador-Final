@@ -7,109 +7,65 @@ use Illuminate\Http\Request;
 
 class AcompanianteController extends Controller
 {
-    /**
-     * Mostrar todos los acompañantes.
-     * GET /api/v1/acompañantes
-     */
+    // 🔹 Mostrar todos los acompañantes
     public function index()
     {
         $acompañantes = Acompaniante::all();
-
-        if ($acompañantes->isEmpty()) {
-            return response()->json(['message' => 'No hay acompañantes registrados'], 200);
-        }
-
-        return response()->json($acompañantes, 200);
+        return view('modules.Acompaniante.index', compact('acompañantes'));
     }
 
-    /**
-     * Registrar un nuevo acompañante.
-     * POST /api/v1/acompañantes
-     */
+    // 🔹 Mostrar formulario para crear
+    public function create()
+    {
+        return view('modules.Acompaniante.create');
+    }
+
+    // 🔹 Guardar nuevo acompañante
     public function store(Request $request)
     {
-        // ✅ Validamos los datos
-        $validatedData = $request->validate([
+        $data = $request->validate([
             'Dni_acompañante' => 'required|string|max:20|unique:acompaniante,Dni_acompañante',
             'Nombre_apellido' => 'required|string|max:255',
             'Domicilio' => 'nullable|string|max:255',
-            'Tipo_acompañante' => 'nullable|string|max:100'
-        ], [
-            'Dni_acompañante.required' => 'El DNI del acompañante es obligatorio.',
-            'Dni_acompañante.unique' => 'Ya existe un acompañante con ese DNI.',
-            'Nombre_apellido.required' => 'El nombre y apellido son obligatorios.'
+            'Tipo_acompañante' => 'nullable|string|max:100',
         ]);
 
-        // ✅ Creamos el registro
-        $acompañante = Acompaniante::create($validatedData);
+        Acompaniante::create($data);
 
-        // ✅ Respondemos con éxito
-        return response()->json([
-            'message' => 'Acompañante registrado correctamente.',
-            'acompañante' => $acompañante
-        ], 201);
+        return redirect()->route('acompaniante.index')->with('success', 'Acompañante registrado correctamente.');
     }
 
-    /**
-     * Mostrar un acompañante por su ID.
-     * GET /api/v1/acompañantes/{id}
-     */
-    public function show($id)
+    // 🔹 Mostrar detalle
+    public function show(Acompaniante $acompaniante)
     {
-        $acompañante = Acompaniante::find($id);
-
-        if (!$acompañante) {
-            return response()->json(['message' => 'Acompañante no encontrado.'], 404);
-        }
-
-        return response()->json($acompañante, 200);
+        return view('modules.Acompaniante.show', compact('acompaniante'));
     }
 
-    /**
-     * Actualizar los datos de un acompañante existente.
-     * PUT /api/v1/acompañantes/{id}
-     */
-    public function update(Request $request, $id)
+    // 🔹 Mostrar formulario de edición
+    public function edit(Acompaniante $acompaniante)
     {
-        $acompañante = Acompaniante::find($id);
+        return view('modules.Acompaniante.edit', compact('acompaniante'));
+    }
 
-        if (!$acompañante) {
-            return response()->json(['message' => 'Acompañante no encontrado.'], 404);
-        }
-
-        // ✅ Validación flexible (solo los campos enviados)
-        $validatedData = $request->validate([
-            'Dni_acompañante' => "sometimes|required|string|max:20|unique:acompaniante,Dni_acompañante,{$id}",
-            'Nombre_apellido' => 'sometimes|required|string|max:255',
+    // 🔹 Actualizar
+    public function update(Request $request, Acompaniante $acompaniante)
+    {
+        $data = $request->validate([
+            'Dni_acompañante' => "required|string|max:20|unique:acompaniante,Dni_acompañante,{$acompaniante->id}",
+            'Nombre_apellido' => 'required|string|max:255',
             'Domicilio' => 'nullable|string|max:255',
-            'Tipo_acompañante' => 'nullable|string|max:100'
-        ], [
-            'Dni_acompañante.unique' => 'Ya existe otro acompañante con ese DNI.'
+            'Tipo_acompañante' => 'nullable|string|max:100',
         ]);
 
-        // ✅ Actualizamos
-        $acompañante->update($validatedData);
+        $acompaniante->update($data);
 
-        return response()->json([
-            'message' => 'Acompañante actualizado correctamente.',
-            'acompañante' => $acompañante
-        ], 200);
+        return redirect()->route('acompaniante.index')->with('success', 'Acompañante actualizado correctamente.');
     }
 
-    /**
-     * Eliminar un acompañante.
-     * DELETE /api/v1/acompañantes/{id}
-     */
-    public function destroy($id)
+    // 🔹 Eliminar
+    public function destroy(Acompaniante $acompaniante)
     {
-        $acompañante = Acompaniante::find($id);
-
-        if (!$acompañante) {
-            return response()->json(['message' => 'Acompañante no encontrado.'], 404);
-        }
-
-        $acompañante->delete();
-
-        return response()->json(['message' => 'Acompañante eliminado correctamente.'], 200);
+        $acompaniante->delete();
+        return redirect()->route('acompaniante.index')->with('success', 'Acompañante eliminado correctamente.');
     }
 }

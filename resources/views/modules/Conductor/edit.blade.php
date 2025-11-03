@@ -8,6 +8,21 @@
             @csrf
             @method('PUT')
 
+            {{-- Acompañante --}}
+            <div>
+                <label for="acompaniante_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Acompañante</label>
+                <select id="acompaniante_id" name="acompaniante_id"
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                    <option value="">-- Seleccionar --</option>
+                    @foreach($acompañantes as $acompaniante)
+                        <option value="{{ $acompaniante->id }}" 
+                            {{ old('acompaniante_id', $conductor->acompaniante_id) == $acompaniante->id ? 'selected' : '' }}>
+                            {{ $acompaniante->Nombre_apellido }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             {{-- Nombre y Apellido --}}
             <div>
                 <label for="nombre_apellido" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Nombre y Apellido</label>
@@ -43,6 +58,7 @@
                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
             </div>
 
+
             {{-- Destino --}}
             <div>
                 <label for="destino" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Destino</label>
@@ -50,6 +66,7 @@
                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
             </div>
 
+            {{-- Botones --}}
             <div class="flex justify-end gap-3 pt-4">
                 <a href="{{ route('conductores.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg">Cancelar</a>
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Actualizar</button>

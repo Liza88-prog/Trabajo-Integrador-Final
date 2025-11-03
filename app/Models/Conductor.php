@@ -18,7 +18,6 @@ class Conductor extends Model
         'domicilio',
         'categoria_carnet',
         'tipo_conductor',
-        'vehiculo_id',
         'destino'
     ];
 

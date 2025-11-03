@@ -1,8 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Gestión de Vehículos
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                Gestión de Vehículos
+            </h2>
+
+            {{-- 🔹 Navegador hacia Conductor --}}
+            <nav>
+                <a href="{{ route('conductores.index') }}"
+                   class="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded transition">
+                    Ir a Conductores
+                </a>
+            </nav>
+        </div>
     </x-slot>
 
     <div class="py-6">
@@ -83,9 +93,8 @@
                         </tbody>
                     </table>
 
-                    {{-- Paginación (si usás paginate() en el controlador) --}}
+                    {{-- Paginación --}}
                     <div class="mt-4 px-4">
-                
                     </div>
                 @else
                     <div class="p-6 text-center text-gray-600 dark:text-gray-300">

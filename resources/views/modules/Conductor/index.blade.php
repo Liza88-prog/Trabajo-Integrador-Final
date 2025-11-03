@@ -1,6 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
-        Gestión de Conductores
+        <div class="flex justify-between items-center">
+            <h2>Gestión de Conductores</h2>
+
+            {{-- 🔹 Navegadores --}}
+            <nav class="flex gap-2">
+                <a href="{{ url('acompaniante') }}"
+                   class="text-sm text-white font-medium bg-black px-3 py-1 rounded hover:bg-gray-800 transition">
+                    Ir a Acompañante
+                </a>
+
+                <a href="{{ route('vehiculo.index') }}"
+                   class="text-sm text-white font-medium bg-black px-3 py-1 rounded hover:bg-gray-800 transition">
+                    Ir a Vehículo
+                </a>
+            </nav>
+        </div>
     </x-slot>
 
     <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -23,8 +38,12 @@
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre y Apellido</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acompañante</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">DNI</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre y Apellido</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Domicilio</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Categoría Carnet</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tipo Conductor</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Vehículo</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Destino</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
@@ -34,8 +53,12 @@
                     @foreach($conductores as $conductor)
                         <tr>
                             <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">{{ $conductor->id }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->nombre_apellido }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->acompaniante->Nombre_apellido ?? '—' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->dni_conductor }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->nombre_apellido }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->domicilio ?? '—' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->categoria_carnet ?? '—' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->tipo_conductor ?? '—' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->vehiculo->marca_modelo ?? '—' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $conductor->destino ?? '—' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 flex gap-2">

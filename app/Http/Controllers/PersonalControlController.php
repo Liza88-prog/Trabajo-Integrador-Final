@@ -69,6 +69,11 @@ class PersonalControlController extends Controller
         return view('modules.PersonalControl.edit', compact('personal_control', 'roles')); // compact('personal_control', 'roles')
     }
 
+    public function show(PersonalControl $personal_control)
+{
+    return view('modules.PersonalControl.show', compact('personal_control'));
+}
+
     /**
      * 💾 Actualiza el recurso especificado. (ACTION)
      */

@@ -57,8 +57,9 @@
 
                     <div>
                         <span class="font-bold">Acompañante:</span>
-                        <p>{{ $conductor->acompaniante->nombre_apellido ?? '—' }}</p>
+                        <p>{{ $conductor->acompaniante->Nombre_apellido ?? '—' }}</p>
                     </div>
+
 
                 </div>
 

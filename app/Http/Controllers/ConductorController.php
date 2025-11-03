@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Conductor;
+use App\Models\Acompaniante;
+use App\Models\Vehiculo;
 use Illuminate\Http\Request;
 
 class ConductorController extends Controller
@@ -30,7 +32,6 @@ class ConductorController extends Controller
             'domicilio' => 'nullable|string|max:255',
             'categoria_carnet' => 'nullable|string|max:50',
             'tipo_conductor' => 'nullable|string|max:50',
-            'vehiculo_id' => 'nullable|integer|exists:vehiculo,id',
             'destino' => 'nullable|string|max:255',
         ]);
 
@@ -48,7 +49,9 @@ class ConductorController extends Controller
     // Mostrar formulario para editar un conductor
     public function edit(Conductor $conductor)
     {
-        return view('modules.Conductor.edit', compact('conductor'));
+        $acompañantes = Acompaniante::all(); // Trae todos los acompañantes
+    
+        return view('modules.Conductor.edit', compact('conductor', 'acompañantes'));
     }
 
     // Actualizar conductor
@@ -61,7 +64,6 @@ class ConductorController extends Controller
             'domicilio' => 'sometimes|nullable|string|max:255',
             'categoria_carnet' => 'sometimes|nullable|string|max:50',
             'tipo_conductor' => 'sometimes|nullable|string|max:50',
-            'vehiculo_id' => 'sometimes|nullable|integer|exists:vehiculo,id',
             'destino' => 'sometimes|nullable|string|max:255',
         ]);
 
