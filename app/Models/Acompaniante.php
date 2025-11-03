@@ -20,6 +20,6 @@ class Acompaniante extends Model
 
     public function conductores()
     {
-        return $this->hasMany(Conductor::class, 'acompaniante_id');
+        return $this->belongsToMany(Conductor::class, 'acompaniante_id',);
     }
 }

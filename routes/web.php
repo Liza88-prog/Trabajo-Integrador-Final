@@ -35,6 +35,7 @@ Route::prefix('personalcontrol')->name('personalcontrol.')->group(function () {
     Route::get('/create', [PersonalControlController::class, 'create'])->name('create');
     Route::post('/', [PersonalControlController::class, 'store'])->name('store');
     Route::get('/{personal_control}/edit', [PersonalControlController::class, 'edit'])->name('edit');
+    Route::get('/{personal_control}', [PersonalControlController::class, 'show'])->name('show');
     Route::put('/{personal_control}', [PersonalControlController::class, 'update'])->name('update');
     Route::delete('/{personal_control}', [PersonalControlController::class, 'destroy'])->name('destroy');
 
@@ -43,7 +44,7 @@ Route::prefix('personalcontrol')->name('personalcontrol.')->group(function () {
 // ---------------------------------------
 // RUTAS DE PERSONAL CONTROL
 // ---------------------------------------
-Route::resource('PersonalControl', PersonalControlController::class)->names('   PersonalControl');
+//Route::resource('PersonalControl', PersonalControlController::class)->names('   PersonalControl');
 // ---------------------------------------
 // RUTAS DE VEHÍCULOS
 // ---------------------------------------
@@ -74,11 +75,16 @@ Route::delete('acompañante/{acompañante}', [AcompanianteController::class, 'de
 // ---------------------------------------
 // RUTAS DE NOVEDADES
 // ---------------------------------------
-Route::get('novedades', [NovedadController::class, 'index']);
-Route::post('novedades', [NovedadController::class, 'store']);
-Route::get('novedades/{novedad}', [NovedadController::class, 'show']);
-Route::put('novedades/{novedad}', [NovedadController::class, 'update']);
-Route::delete('novedades/{novedad}', [NovedadController::class, 'destroy']);
+Route::prefix('novedades')->name('novedades.')->group(function () {
+    Route::get('/', [NovedadController::class, 'index'])->name('index');
+    Route::get('/create', [NovedadController::class, 'create'])->name('create');
+    Route::post('/', [NovedadController::class, 'store'])->name('store');
+    Route::get('/{novedad}', [NovedadController::class, 'show'])->name('show');
+    Route::get('/{novedad}/edit', [NovedadController::class, 'edit'])->name('edit');
+    Route::put('/{novedad}', [NovedadController::class, 'update'])->name('update');
+    Route::delete('/{novedad}', [NovedadController::class, 'destroy'])->name('destroy');
+});
+
 
 
 // ---------------------------------------

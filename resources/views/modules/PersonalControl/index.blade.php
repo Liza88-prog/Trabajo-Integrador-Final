@@ -1,6 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        Gestión de Personal de Control
+        <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold">Gestión de Personal de Control</h2>
+
+            {{-- 🔹 Navegadores oscuro --}}
+            <nav class="flex gap-2 bg-gray-900 text-white px-3 py-1 rounded-md shadow">
+                <a href="{{ route('conductores.index') }}"
+                   class="text-sm font-medium hover:underline">
+                    Conductores
+                </a>
+            </nav>
+        </div>
+            
+    
     </x-slot>
 
     <div class="py-12">
@@ -39,6 +51,8 @@
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $personal->dni }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $personal->rol->nombre ?? 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap flex gap-2">
+                                <a href="{{ route('personalcontrol.show', $personal->id) }}" class="text-green-600 hover:text-green-900">Ver detalle</a>
+
                                     <a href="{{ route('personalcontrol.edit', $personal->id) }}" class="text-indigo-600 hover:text-indigo-900">Editar</a>
                                     <form action="{{ route('personalcontrol.destroy', $personal->id) }}" method="POST" onsubmit="return confirm('¿Está seguro de eliminar este registro?');">
                                         @csrf

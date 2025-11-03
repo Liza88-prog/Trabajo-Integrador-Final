@@ -1,19 +1,24 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Gestión de Vehículos
-            </h2>
+    <div class="flex justify-between items-center">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            Gestión de Vehículos
+        </h2>
 
-            {{-- 🔹 Navegador hacia Conductor --}}
-            <nav>
-                <a href="{{ route('conductores.index') }}"
-                   class="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded transition">
-                    Ir a Conductores
-                </a>
-            </nav>
-        </div>
-    </x-slot>
+        {{-- 🔹 Navegador hacia Conductor y novedades --}}
+        <nav class="flex space-x-2">
+            <a href="{{ route('conductores.index') }}"
+               class="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded transition">
+                Ir a Conductores
+            </a>
+
+            <a href="{{ route('novedades.index') }}"
+               class="text-sm text-white font-medium bg-black px-3 py-1 rounded hover:bg-gray-800 transition">
+                Ir a novedades
+            </a>
+        </nav>
+    </div>
+</x-slot>
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
