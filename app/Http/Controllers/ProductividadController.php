@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acompaniante;
+use App\Models\Conductor;
 use App\Models\Productividad;
 use App\Models\PersonalControl;
+use App\Models\Vehiculo;
 use Illuminate\Http\Request;
 
 class ProductividadController extends Controller
@@ -14,7 +17,16 @@ class ProductividadController extends Controller
     public function index()
     {
         $productividades = Productividad::with('personalcontrol')->get();
-        return view('modules.Productividad.index', compact('productividades'));
+
+         // Calcular totales automáticos desde la base de datos
+                $totalConductores = \App\Models\Conductor::count();
+                $totalVehiculos = \App\Models\Vehiculo::count();
+                $totalAcompanantes = \App\Models\Acompaniante::count();
+
+            return view('modules.Productividad.index', compact('productividades',
+        'totalConductores',
+        'totalVehiculos',
+        'totalAcompanantes'));
     }
 
     /**
@@ -23,7 +35,13 @@ class ProductividadController extends Controller
     public function create()
     {
         $personalcontrols = PersonalControl::all();
-        return view('modules.Productividad.create', compact('personalcontrols'));
+
+         // 🔹 Obtener totales actuales
+            $total_conductores = \App\Models\Conductor::count();
+            $total_vehiculos = \App\Models\Vehiculo::count();
+            $total_acompanantes = \App\Models\Acompaniante::count();
+
+        return view('modules.Productividad.create', compact('personalcontrols', 'total_conductores', 'total_vehiculos', 'total_acompanantes' ));
     }
 
     /**
@@ -33,11 +51,15 @@ class ProductividadController extends Controller
     {
         $data = $request->validate([
             'personal_control_id' => 'required|integer|exists:personal_control,id',
-            'fecha' => 'required|date',
-            'total_conductor' => 'nullable|integer|min:0',
-            'total_vehiculos' => 'nullable|integer|min:0',
-            'total_acompanante' => 'nullable|integer|min:0',
+            'fecha' => 'required|date'
         ]);
+
+         // Calcular los totales al guardar
+        $data['total_conductor'] = Conductor::count();
+        $data['total_vehiculos'] = Vehiculo::count();
+        $data['total_acompanante'] = Acompaniante::count();
+
+
 
         Productividad::create($data);
 
@@ -67,11 +89,13 @@ class ProductividadController extends Controller
     {
         $data = $request->validate([
             'personal_control_id' => 'required|integer|exists:personal_control,id',
-            'fecha' => 'required|date',
-            'total_conductor' => 'nullable|integer|min:0',
-            'total_vehiculos' => 'nullable|integer|min:0',
-            'total_acompanante' => 'nullable|integer|min:0',
+            'fecha' => 'required|date'
         ]);
+
+        // Recalcular los totales al actualizar
+        $data['total_conductor'] = Conductor::count();
+        $data['total_vehiculos'] = Vehiculo::count();
+        $data['total_acompanante'] = Acompaniante::count();
 
         $productividad->update($data);
 

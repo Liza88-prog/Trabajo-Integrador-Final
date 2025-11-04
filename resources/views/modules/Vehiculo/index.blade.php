@@ -16,6 +16,11 @@
                class="text-sm text-white font-medium bg-black px-3 py-1 rounded hover:bg-gray-800 transition">
                 Ir a novedades
             </a>
+
+            <a href="{{ route('productividades.index') }}"
+               class="text-sm text-white font-medium bg-black px-3 py-1 rounded hover:bg-gray-800 transition">
+                Ir a productividad
+            </a>
         </nav>
     </div>
 </x-slot>

@@ -79,7 +79,7 @@
                                 Total Conductores
                             </label>
                             <input type="number" name="total_conductor" id="total_conductor"
-                                   value="{{ old('total_conductor') }}" min="0"
+                                   value="{{ old('total_conductor', $total_conductores ?? 0) }}" min="0"
                                    class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                             @error('total_conductor')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
@@ -91,7 +91,7 @@
                                 Total Vehículos
                             </label>
                             <input type="number" name="total_vehiculos" id="total_vehiculos"
-                                   value="{{ old('total_vehiculos') }}" min="0"
+                                   value="{{ old('total_vehiculos', $total_vehiculos ?? 0) }}" min="0"
                                    class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                             @error('total_vehiculos')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
@@ -103,12 +103,22 @@
                                 Total Acompañantes
                             </label>
                             <input type="number" name="total_acompanante" id="total_acompanante"
-                                   value="{{ old('total_acompanante') }}" min="0"
+                                   value="{{ old('total_acompanante', $total_acompanantes ?? 0) }}" min="0"
                                    class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                             @error('total_acompanante')
                                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+                    </div>
+
+                    {{-- 🔹 Total Personas Registradas --}}
+                    <div class="mt-4">
+                        <label for="total_personas" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+                            Total Personas Registradas
+                        </label>
+                        <input type="number" id="total_personas" name="total_personas"
+                               readonly
+                               class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm">
                     </div>
 
                     {{-- Botones --}}
@@ -129,4 +139,24 @@
             </div>
         </div>
     </div>
+
+    {{-- 🔹 Script para sumar conductores + acompañantes --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const totalConductor = document.getElementById('total_conductor');
+            const totalAcompanante = document.getElementById('total_acompanante');
+            const totalPersonas = document.getElementById('total_personas');
+
+            function actualizarTotal() {
+                const conductor = parseInt(totalConductor.value) || 0;
+                const acompanante = parseInt(totalAcompanante.value) || 0;
+                totalPersonas.value = conductor + acompanante;
+            }
+
+            totalConductor.addEventListener('input', actualizarTotal);
+            totalAcompanante.addEventListener('input', actualizarTotal);
+
+            actualizarTotal();
+        });
+    </script>
 </x-app-layout>

@@ -72,6 +72,14 @@
                     </div>
                 </div>
 
+                {{-- 🔹 Total Personas Registradas --}}
+                <div class="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Personas Registradas</p>
+                    <p class="text-gray-900 dark:text-gray-100 font-bold text-lg">
+                        {{ $productividad->total_conductor + $productividad->total_acompanante }}
+                    </p>
+                </div>
+
                 <div class="mt-6 flex justify-between">
                     <a href="{{ route('productividades.index') }}"
                        class="inline-flex items-center px-4 py-2 bg-gray-500 border border-transparent rounded-md 

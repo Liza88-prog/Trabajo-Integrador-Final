@@ -84,7 +84,7 @@
                             </label>
                             <input type="number" name="total_conductor" id="total_conductor"
                                    value="{{ old('total_conductor', $productividad->total_conductor) }}" min="0"
-                                   class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                   class="no-spin w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
 
                         <div>
@@ -93,7 +93,7 @@
                             </label>
                             <input type="number" name="total_vehiculos" id="total_vehiculos"
                                    value="{{ old('total_vehiculos', $productividad->total_vehiculos) }}" min="0"
-                                   class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                   class="no-spin w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
 
                         <div>
@@ -102,7 +102,7 @@
                             </label>
                             <input type="number" name="total_acompanante" id="total_acompanante"
                                    value="{{ old('total_acompanante', $productividad->total_acompanante) }}" min="0"
-                                   class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                   class="no-spin w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                     </div>
 

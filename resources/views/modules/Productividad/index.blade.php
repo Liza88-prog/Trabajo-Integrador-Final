@@ -20,6 +20,11 @@
                    class="text-white bg-black px-3 py-1 rounded font-medium text-sm hover:bg-gray-800">
                     Ir a Novedades
                 </a>
+
+                <a href="{{ route('personalcontrol.index') }}"
+                   class="text-white bg-black px-3 py-1 rounded font-medium text-sm hover:bg-gray-800">
+                    Ir a Personal de Control
+                </a>
             </nav>
         </div>
     </x-slot>
@@ -57,11 +62,11 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach($productividades as $productividad)
+                        @forelse($productividades as $productividad)
                             <tr>
                                 <td class="px-6 py-4">{{ $productividad->id }}</td>
                                 <td class="px-6 py-4">
-                                    {{ $productividad->personalControl->nombre_apellido ?? '—' }}
+                                    {{ $productividad->personalcontrol->nombre_apellido ?? '—' }}
                                 </td>
                                 <td class="px-6 py-4">{{ $productividad->fecha }}</td>
                                 <td class="px-6 py-4">{{ $productividad->total_conductor ?? 0 }}</td>
@@ -77,7 +82,13 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-gray-500 dark:text-gray-400">
+                                    No hay registros de productividad aún.
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
