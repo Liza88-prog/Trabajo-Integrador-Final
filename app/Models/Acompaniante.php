@@ -15,11 +15,17 @@ class Acompaniante extends Model
         'Dni_acompañante',
         'Nombre_apellido',
         'Domicilio',
-        'Tipo_acompañante'
+        'Tipo_acompañante',
+        'conductor_id'
     ];
 
-    public function conductores()
+   /**
+     * 🔹 Relación: un acompañante pertenece a un conductor
+     */
+    public function conductor()
     {
-        return $this->belongsToMany(Conductor::class, 'acompaniante_id',);
+        return $this->belongsTo(Conductor::class, 'conductor_id');
     }
+
+
 }

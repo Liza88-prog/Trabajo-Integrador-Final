@@ -14,11 +14,15 @@ return new class extends Migration
         Schema::create('acompaniante', function (Blueprint $table) {
             $table->id(); // ID autoincremental interno
 
-          
             $table->string('Dni_acompañante')->unique();       // DNI del acompañante
             $table->string('Nombre_apellido');                 // Nombre y apellido
             $table->string('Domicilio')->nullable();           // Domicilio
             $table->string('Tipo_acompañante')->nullable();    // Tipo de acompañante (ej: pasajero, copiloto, etc.)
+
+            // 🔹 Clave foránea hacia conductor
+            $table->foreignId('conductor_id')
+                  ->constrained('conductor')   // nombre de la tabla conductores
+                  ->onDelete('cascade');
 
             $table->timestamps(); // created_at y updated_at
         });

@@ -21,13 +21,18 @@ class Conductor extends Model
         'destino'
     ];
 
+    /**
+     *  Relación: un conductor tiene muchos acompañantes
+     */
     public function acompaniante()
     {
-        return $this->belongsTo(Acompaniante::class, 'acompaniante_id');
+        return $this->hasMany(Acompaniante::class, 'conductor_id');
     }
 
     public function vehiculo()
     {
         return $this->hasOne(Vehiculo::class, 'conductor_id');
     }
+
+
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('observaciones')->nullable();
             $table->timestamps();
 
-            // 🔗 Relación con tabla vehiculos (si existe)
+            // 🔗 Relación correcta con tabla vehiculo
             $table->foreign('vehiculo_id')
                   ->references('id')
                   ->on('vehiculo')
