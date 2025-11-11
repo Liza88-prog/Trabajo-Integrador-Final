@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'vite' => [
+    'manifest_path' => public_path('build/manifest.json'),
+],
+
 ];
