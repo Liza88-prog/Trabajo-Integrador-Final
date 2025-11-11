@@ -1,0 +1,42 @@
+name: CI - Control Vehicular PFA
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name:  Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, bcmath, pdo_sqlite, sqlite3, fileinfo
+          coverage: none
+
+      - name:  Instalar dependencias
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name:  Generar archivo .env y clave
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name:  Ejecutar migraciones en SQLite memoria
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+        run: php artisan migrate --force
+
+      - name: Ejecutar tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+        run: php artisan test

@@ -25,6 +25,8 @@ class Vehiculo extends Model
         return $this->belongsTo(Conductor::class, 'conductor_id');
     }
 
+    
+
     public function novedades()
     {
         return $this->hasMany(Novedad::class, 'vehiculo_id');

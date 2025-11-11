@@ -3,104 +3,99 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
+use App\Models\PersonalControl;
+use App\Models\Conductor;
 use Illuminate\Http\Request;
-
 
 class VehiculoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Mostrar listado de vehículos
      */
-    //// GET /api/v1/vehiculos
     public function index()
     {
-        $vehiculo = Vehiculo::all();
+        $vehiculos = Vehiculo::with(['conductor', 'personalControl'])->get();
 
-        return response()->json($vehiculo);
+        return view('modules.Vehiculo.index', compact('vehiculos'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Formulario para crear nuevo vehículo
      */
-    //// POST /api/v1/vehiculos
+    public function create()
+    {
+        $personalControls = PersonalControl::all();
+        $conductores = Conductor::all();
+
+        return view('modules.Vehiculo.create', compact('personalControls', 'conductores'));
+    }
+
+    /**
+     * Guardar vehículo nuevo
+     */
     public function store(Request $request)
-{
-    // Validamos los datos
-    $data = $request->validate([
-        'personal_control_id' => 'required|exists:personal_control,id',
-        'conductor_id' => 'required|exists:conductor,id',
-        'fecha_hora_control' => 'required|date_format:Y-m-d H:i:s',
-        'marca_modelo' => 'required|string|max:255',
-        'dominio' => 'required|string|max:20|unique:vehiculo,dominio',
-        'color' => 'nullable|string|max:50'
-    ]);
-
-    // Creamos el vehículo
-    $vehiculo = Vehiculo::create($data);
-
-    // Si por algún motivo no se crea, devolvemos error
-    if (!$vehiculo) {
-        return response()->json(['message' => 'No se pudo crear el vehículo'], 500);
-    }
-
-    // ✅ Devolvemos el resultado con status 201 (Created)
-    return response()->json([
-        'message' => 'Vehículo registrado correctamente',
-        'vehiculo' => $vehiculo
-    ], 201);
-}
-
-    /**
-     * Display the specified resource.
-     */
-    /// GET /api/v1/vehiculos/{id}
-    public function show(string $id)
     {
-        $vehiculo = Vehiculo::find($id);
-
-        if (!$vehiculo) {
-            return response()->json(['message' => 'Vehiculo no encontrado'], 404);
-        }
-
-        return response()->json($vehiculo, 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    // PUT /api/v1/vehiculos/{id}
-    public function update(Request $request, string $id)
-    {
-        $vehiculo = Vehiculo::find($id);
-
-        if (!$vehiculo) {
-            return response()->json(['message' => 'Vehiculo no encontrado'], 404);
-        }
-
         $data = $request->validate([
-            'personal_control_id' => 'sometimes|required|exists:personal_control,id',
-            'conductor_id' => 'sometimes|required|exists:conductor,id',
-            'fecha_hora_control' => 'sometimes|required|date_format:Y-m-d H:i:s',
-            'marca_modelo' => 'sometimes|required|string|max:255',
-            'dominio' => "sometimes|required|string|max:20|unique:vehiculo,dominio,{$id}",
+            'personal_control_id' => 'required|exists:personal_control,id',
+            'conductor_id' => 'required|exists:conductor,id',
+            'fecha_hora_control' => 'required|date_format:Y-m-d\TH:i',
+            'marca_modelo' => 'required|string|max:255',
+            'dominio' => 'required|string|max:20|unique:vehiculo,dominio',
+            'color' => 'nullable|string|max:50'
+        ]);
+
+        $vehiculo = Vehiculo::create($data);
+
+        return redirect()->route('vehiculo.index')->with('success', 'Vehículo registrado correctamente.');
+    }
+
+    public function show(Vehiculo $vehiculo)
+    {
+        // Si estás usando vistas con Jetstream:
+        return view('modules.Vehiculo.show', compact('vehiculo'));
+
+        // O si estás usando API:
+        // return response()->json($vehiculo);
+    }
+
+
+    /**
+     * Formulario para editar vehículo existente
+     */
+    public function edit(Vehiculo $vehiculo)
+    {
+        $personalControls = PersonalControl::all();
+        $conductores = Conductor::all();
+
+        return view('modules.Vehiculo.edit', compact('vehiculo', 'personalControls', 'conductores'));
+    }
+
+    /**
+     * Actualizar vehículo
+     */
+    public function update(Request $request, Vehiculo $vehiculo)
+    {
+        $data = $request->validate([
+            'personal_control_id' => 'required|exists:personal_control,id',
+            'conductor_id' => 'required|exists:conductor,id',
+            'fecha_hora_control' => 'required|date_format:Y-m-d\TH:i',
+            'marca_modelo' => 'required|string|max:255',
+            'dominio' => 'required|string|max:20|unique:vehiculo,dominio,' . $vehiculo->id,
             'color' => 'nullable|string|max:50'
         ]);
 
         $vehiculo->update($data);
 
-        return response()->json([
-            'message' => 'Vehiculo actualizado correctamente',
-            'vehiculo' => $vehiculo
-        ], 200);
+        return redirect()->route('vehiculo.index')->with('success', 'Vehículo actualizado correctamente.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar vehículo
      */
-    /// DELETE /api/v1/vehiculos/{id}
     public function destroy(Vehiculo $vehiculo)
     {
         $vehiculo->delete();
-        return response()->json(null, 204);
+
+        return redirect()->route('vehiculo.index')->with('success', 'Vehículo eliminado correctamente.');
     }
 }

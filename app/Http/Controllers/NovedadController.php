@@ -8,20 +8,30 @@ use Illuminate\Http\Request;
 class NovedadController extends Controller
 {
     /**
-     * Muestra todas las novedades (GET /api/v1/novedades)
+     * Muestra todas las novedades en vista web.
      */
     public function index()
     {
+        // Traer todas las novedades con su vehiculo
         $novedades = Novedad::with('vehiculo')->get();
 
-        return response()->json([
-            'message' => 'Listado de novedades obtenido correctamente',
-            'data' => $novedades
-        ], 200);
+        // Devolver vista con los datos
+        return view('modules.Novedades.index', compact('novedades'));
     }
 
     /**
-     * Crea una nueva novedad (POST /api/v1/novedades)
+     * Muestra el formulario para crear nueva novedad
+     */
+    public function create()
+    {
+        // Obtener vehículos para el select
+        $vehiculos = \App\Models\Vehiculo::all();
+
+        return view('modules.Novedades.create', compact('vehiculos'));
+    }
+
+    /**
+     * Almacena una nueva novedad
      */
     public function store(Request $request)
     {
@@ -32,59 +42,51 @@ class NovedadController extends Controller
             'observaciones' => 'nullable|string|max:255'
         ]);
 
-        $novedad = Novedad::create($data);
+        Novedad::create($data);
 
-        return response()->json([
-            'message' => 'Novedad registrada correctamente',
-            'data' => $novedad
-        ], 201);
+        return redirect()->route('novedades.index')->with('success', 'Novedad creada correctamente.');
     }
 
     /**
-     * Muestra una novedad por su ID (GET /api/v1/novedades/{id})
+     * Muestra la novedad específica
      */
-    public function show($id)
+    public function show(Novedad $novedad)
     {
-        $novedad = Novedad::with('vehiculo')->find($id);
-
-        if (!$novedad) {
-            return response()->json([
-                'message' => 'Novedad no encontrada'
-            ], 404);
-        }
-
-        return response()->json($novedad, 200);
+        return view('modules.Novedades.show', compact('novedad'));
     }
 
     /**
-     * Actualiza una novedad existente (PUT/PATCH /api/v1/novedades/{id})
+     * Muestra el formulario de edición
+     */
+    public function edit(Novedad $novedad)
+    {
+        $vehiculos = \App\Models\Vehiculo::all();
+        return view('modules.Novedades.edit', compact('novedad', 'vehiculos'));
+    }
+
+    /**
+     * Actualiza la novedad
      */
     public function update(Request $request, Novedad $novedad)
     {
         $data = $request->validate([
-            'vehiculo_id' => 'sometimes|integer|exists:vehiculo,id',
-            'tipo_novedad' => 'sometimes|string|max:100',
-            'aplica' => 'sometimes|string|max:50',
-            'observaciones' => 'sometimes|nullable|string|max:255'
+            'vehiculo_id' => 'required|integer|exists:vehiculo,id',
+            'tipo_novedad' => 'required|string|max:100',
+            'aplica' => 'required|string|max:50',
+            'observaciones' => 'nullable|string|max:255'
         ]);
 
         $novedad->update($data);
 
-        return response()->json([
-            'message' => 'Novedad actualizada correctamente',
-            'data' => $novedad
-        ], 200);
+        return redirect()->route('novedades.index')->with('success', 'Novedad actualizada correctamente.');
     }
 
     /**
-     * Elimina una novedad (DELETE /api/v1/novedades/{id})
+     * Elimina una novedad
      */
     public function destroy(Novedad $novedad)
     {
         $novedad->delete();
-
-        return response()->json([
-            'message' => 'Novedad eliminada correctamente'
-        ], 200);
+        return redirect()->route('novedades.index')->with('success', 'Novedad eliminada correctamente.');
     }
 }
